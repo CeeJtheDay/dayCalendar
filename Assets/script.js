@@ -37,20 +37,52 @@
 function buildRows(){
     for (var i = 0; i < 9; i++) {
     var newRow = $("<div class = 'row'>");
+    //gets current time @ pageload
+    var curTime = new Date().getHours();
+    function am (curTime) {
+        if (curTime >= 0 && curTime <= 10) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    // creates new row and assigns attribute of hour
     newRow.attr("hour", 9 + i);
+    // adds the row to the main content
    $(".container").append(newRow);
+   // grabs current value of the hour attribute
     var curHour = newRow.attr("hour");
+    // adjusts hour attribute for afternoon hours
     if (curHour > 12) {
         curHour = curHour - 12;
         newRow.attr("hour", curHour);
     };
-    if (curHour >= 9) {
+    // assigns AM or PM to hour attribute
+    if (curHour >= 9 && curHour != 12) {
         curHour = curHour += "AM";
     } else {
         curHour = curHour += "PM";
     }
-    newRow.append("<div class = 'col-sm-1 hour'> " + curHour + " </div>");
-    newRow.append("<div class = 'col-sm-10 time-block'><textarea class = 'description'></textarea></div>");
+    // create the input area and row title
+    var txtBox = $("<div class = 'col-sm-10 time-block'><textarea class = 'description'></textarea></div>");
+    var hrBox = $("<div class = 'col-sm-1 hour'> " + curHour + " </div>");
+    newRow.append(hrBox);
+    newRow.append(txtBox);
+    // adjusts time to account for afternoon hours
+    if (curTime > 12) {
+        curTime = curTime - 12;
+    }
+    // assigns classes to each hour for tracking present time
+    if (parseInt(curHour) < curTime) {
+       txtBox.addClass("past");
+    } 
+    if (parseInt(curHour) > curTime) {
+        txtBox.addClass("future");
+    }
+    if (parseInt(curHour) === curTime) {
+        txtBox.addClass("present");
+    }
+    //adds save button at end of row
     newRow.append("<button <i class='col-sm-1 fas fa-save saveBtn'></i></button>");
 }
 };
@@ -61,12 +93,17 @@ function showTodaysDate(){
     $("#currentDay").append("<div class = 'col-sm-12'> " + 
     time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true } 
     + " </div>"));
+
 };
 showTodaysDate();
+
 //      c. Save button event handler (saveRow) --> use localStorage
 function saveRow(){
+    // $("button").on("click", function()
+//  {
 
-}
+//  })
+};
 //      d. change row style (updateRowStyle) --> moment.js
 function updateRowStyle(){
 //          i. on page load check current time (hour) against rows in scheduler

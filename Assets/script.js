@@ -39,13 +39,13 @@ function buildRows(){
     var newRow = $("<div class = 'row'>");
     //gets current time @ pageload
     var curTime = new Date().getHours();
-    function am (curTime) {
-        if (curTime >= 0 && curTime <= 10) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // function am (curTime) {
+    //     if (curTime >= 0 && curTime <= 10) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
     // creates new row and assigns attribute of hour
     newRow.attr("hour", 9 + i);
     // adds the row to the main content
@@ -69,9 +69,9 @@ function buildRows(){
     newRow.append(hrBox);
     newRow.append(txtBox);
     // adjusts time to account for afternoon hours
-    if (curTime > 12) {
-        curTime = curTime - 12;
-    }
+    // if (curTime > 12) {
+    //     curTime = curTime - 12;
+    // }
     // assigns classes to each hour for tracking present time
     if (parseInt(curHour) < curTime) {
        txtBox.addClass("past");
@@ -81,6 +81,9 @@ function buildRows(){
     }
     if (parseInt(curHour) === curTime) {
         txtBox.addClass("present");
+    }
+    if (curTime > 12) {
+        curTime = curTime - 12;
     }
     //adds save button at end of row
     newRow.append("<button <i class='col-sm-1 fas fa-save saveBtn'></i></button>");

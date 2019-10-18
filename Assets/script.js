@@ -50,22 +50,19 @@ function buildRows(){
         curHour = curHour += "PM";
     }
     newRow.append("<div class = 'col-sm-1 hour'> " + curHour + " </div>");
-    newRow.append("<div class = 'col-sm-10 text'><textarea></textarea></div>");
+    newRow.append("<div class = 'col-sm-10 time-block'><textarea class = 'description'></textarea></div>");
     newRow.append("<button <i class='col-sm-1 fas fa-save saveBtn'></i></button>");
 }
 };
 buildRows();
 //      b. Set date at top of page (showTodaysDate) --> moment.js
 function showTodaysDate(){
-    var currentdate = new Date(); 
-var dateTime = "Last Sync: " + currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds();
-                console.log(datetime);
-}
+    var time = new Date();
+    $("#currentDay").append("<div class = 'col-sm-12'> " + 
+    time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true } 
+    + " </div>"));
+};
+showTodaysDate();
 //      c. Save button event handler (saveRow) --> use localStorage
 function saveRow(){
 

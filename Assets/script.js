@@ -32,91 +32,81 @@
 //      a. styles already exsist (past, present, future)
 
 
+$(document).ready(function () {
+   
+    function buildRows() {
+       
+        for (var i = 0; i < 9; i++) {
+            var newRow = $("<div class = 'row'>");
+            //gets current time @ pageload
+            var curTime = new Date().getHours();
+            // creates new row and assigns attribute of hour
+            newRow.attr("hour", 9 + i);
+            // adds the row to the main content
+            $(".container").append(newRow);
+            // grabs current value of the hour attribute
+            var curUserHour = newRow.attr("hour").trim();
+            var curHour = newRow.attr("hour");
+            // adjusts hour attribute for afternoon hours
+            if (curUserHour > 12) {
+                curUserHour = curUserHour - 12;
+                newRow.attr("hour", curUserHour);
+            };
+            // // assigns AM or PM to hour attribute
+            if (curUserHour >= 9 && curUserHour != 12) {
+                curUserHour = curUserHour += "AM";
+            } else {
+                curUserHour = curUserHour += "PM";
+            }
+            // create the input area and row title
+            var txtBox = $("<div class = 'col-sm-10 time-block'><textarea class = 'description'></textarea></div>");
+            var hrBox = $("<div class = 'col-sm-1 hour'> " + curUserHour + " </div>");
+            newRow.append(hrBox);
+            newRow.append(txtBox);
 
-//      a. funtion to build scheduler rows (buildRows) --> loop, moment.js
-function buildRows(){
-    for (var i = 0; i < 9; i++) {
-    var newRow = $("<div class = 'row'>");
-    //gets current time @ pageload
-    var curTime = new Date().getHours();
-    // function am (curTime) {
-    //     if (curTime >= 0 && curTime <= 10) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-    // creates new row and assigns attribute of hour
-    newRow.attr("hour", 9 + i);
-    // adds the row to the main content
-   $(".container").append(newRow);
-   // grabs current value of the hour attribute
-    var curUserHour = newRow.attr("hour");
-    var curHour = newRow.attr("hour");
-    // adjusts hour attribute for afternoon hours
-    if (curUserHour > 12) {
-        curUserHour = curUserHour - 12;
-        newRow.attr("hour", curUserHour);
+            if (parseInt(curHour) < curTime) {
+                txtBox.addClass("past");
+            }
+            if (parseInt(curHour) > curTime) {
+                txtBox.addClass("future");
+            }
+            if (parseInt(curHour) === curTime) {
+                txtBox.addClass("present");
+            }
+            if (curTime > 12) {
+                curTime = curTime - 12;
+            }
+            //adds save button at end of row
+            newRow.append("<button <i class='col-sm-1 fas fa-save saveBtn'></i></button>");
+            // set text for texatarea if it exsists in locxal storage
+            var storedTask = localStorage.getItem(curUserHour);
+            console.log(storedTask);
+            var placeText = document.body.children[1].children[i].children[1].children[0];
+            console.log(placeText);
+            placeText = placeText.innerHTML = storedTask;
+
+        }
     };
-    // // assigns AM or PM to hour attribute
-    if (curUserHour >= 9 && curUserHour != 12) {
-        curUserHour = curUserHour += "AM";
-    } else {
-        curUserHour = curUserHour += "PM";
-    }
-    // create the input area and row title
-    var txtBox = $("<div class = 'col-sm-10 time-block'><textarea class = 'description'></textarea></div>");
-    var hrBox = $("<div class = 'col-sm-1 hour'> " + curUserHour + " </div>");
-    newRow.append(hrBox);
-    newRow.append(txtBox);
-    
-    if (parseInt(curHour) < curTime) {
-       txtBox.addClass("past");
-    } 
-    if (parseInt(curHour) > curTime) {
-        txtBox.addClass("future");
-    }
-    if (parseInt(curHour) === curTime) {
-        txtBox.addClass("present");
-    }
-    if (curTime > 12) {
-        curTime = curTime - 12;
-    }
-    //adds save button at end of row
-    newRow.append("<button <i class='col-sm-1 fas fa-save saveBtn'></i></button>");
-    // set text for texatarea if it exsists in locxal storage
-    var storedTask = localStorage.getItem(curUserHour);
-    // newRow.firstChild.innerHTML = storedTask;
-}
-};
-buildRows();
-//      b. Set date at top of page (showTodaysDate) --> moment.js
-function showTodaysDate(){
-    var time = new Date();
-    $("#currentDay").append("<div class = 'col-sm-12'> " + 
-    time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true } 
-    + " </div>"));
+    buildRows();
+    //      b. Set date at top of page (showTodaysDate) --> moment.js
+    function showTodaysDate() {
+        var time = new Date();
+        $("#currentDay").append("<div class = 'col-sm-12'> " +
+            time.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }
+                + " </div>"));
 
-// };
-// showTodaysDate();
+    };
+    showTodaysDate();
+    saveRow();
 
-//      c. Save button event handler (saveRow) --> use localStorage
-// function saveRow(){
-    $(".saveBtn").on("click", function(){
-        var saveText = this.previousSibling.children[0].value;
-        var saveAtr = this.parentNode.children[0].innerHTML;
-        saveText = saveText;
-        localStorage.setItem(saveAtr, saveText);
-    })
-    // save time block title as attribute with user text as value**
-//  {
+    //      c. Save button event handler (saveRow) --> use localStorage
+    function saveRow() {
+        $(".saveBtn").on("click", function () {
+            var saveText = this.previousSibling.children[0].value;
+            var saveAtr = this.parentNode.children[0].innerHTML.trim();
+            saveText = saveText;
+            localStorage.setItem(saveAtr, saveText);
+        });
+    };
 
-//  })
-// };
-//      d. change row style (updateRowStyle) --> moment.js
-// function updateText(){
-    
-//          i. on page load check current time (hour) against rows in scheduler
-//          ii. update style for those that are past, present, future.
-
-};
+});
